@@ -6,85 +6,166 @@ from chains import (
     estimate_budget
 )
 
-# ----------------------------
-# Page Configuration
-# ----------------------------
 st.set_page_config(
     page_title="AI Travel Planner",
-    page_icon="✈️",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+st.markdown("""
+<style>
+
+
+.block-container{
+    padding-top:2rem;
+    padding-bottom:2rem;
+    max-width:1100px;
+}
+
+
+.stButton>button{
+    width:100%;
+    height:3rem;
+    border-radius:8px;
+    font-weight:600;
+}
+
+
+.stTextInput input,
+.stNumberInput input{
+    border-radius:8px;
+}
+
+
+.stSelectbox{
+    border-radius:8px;
+}
+
+
+button[data-baseweb="tab"]{
+    font-size:16px;
+    font-weight:600;
+}
+
+
+div[data-testid="metric-container"]{
+    border:1px solid #e6e6e6;
+    border-radius:10px;
+    padding:18px;
+    background:white;
+}
+
+</style>
+""", unsafe_allow_html=True)
+st.title("AI Travel Planner")
+
+st.caption(
+    "Generate personalized travel itineraries, hotel recommendations, and budget estimation."
 )
 
-st.title("✈️ AI Travel Planner")
-st.write(
-    "Plan your journey with personalized itineraries, handpicked hotel recommendations, and smart budget planning."
+st.markdown("---")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    source = st.text_input(
+        "Source",
+        placeholder="Enter your starting location"
+    )
+
+with col2:
+    destination = st.text_input(
+        "Destination",
+        placeholder="Enter your destination"
+    )
+
+col3, col4 = st.columns(2)
+
+with col3:
+    days = st.number_input(
+        "Duration (Days)",
+        min_value=1,
+        max_value=30,
+        value=3
+    )
+
+with col4:
+    budget = st.number_input(
+        "Budget",
+        min_value=1000,
+        value=20000,
+        step=1000
+    )
+
+travel_style = st.selectbox(
+    "Travel Style",
+    [
+        "Budget",
+        "Standard",
+        "Luxury"
+    ]
 )
 
-st.divider()
+st.markdown("---")
 
-# ----------------------------
-# User Inputs
-# ----------------------------
-
-destination = st.text_input("📍 Destination")
-
-days = st.number_input(
-    "📅 Number of Days",
-    min_value=1,
-    max_value=30,
-    value=3
+generate = st.button(
+    "Generate Travel Plan",
+    use_container_width=True
 )
 
-budget = st.number_input(
-    "💰 Budget",
-    min_value=1000,
-    value=20000,
-    step=1000
-)
-
-st.divider()
-
-# ----------------------------
-# Generate Button
-# ----------------------------
-
-if st.button("🚀 Generate Travel Plan"):
+if generate:
 
     if destination == "":
         st.warning("Please enter a destination.")
     else:
 
-        with st.spinner("Generating itinerary..."):
-            itinerary = generate_itinerary(destination, str(days))
+    with st.spinner("Generating your travel plan..."):
 
-        with st.spinner("Finding hotels..."):
-            hotels = recommend_hotels(
-                destination,
-                str(budget),
-                itinerary
-            )
+    itinerary = generate_itinerary(
+        destination,
+        str(days)
+    )
 
-        with st.spinner("Estimating budget..."):
-            budget_plan = estimate_budget(
-                destination,
-                str(days),
-                str(budget),
-                hotels
-            )
+    hotels = recommend_hotels(
+        destination,
+        str(budget),
+        itinerary
+    )
 
-        st.success("Travel Plan Generated Successfully!")
+    budget_plan = estimate_budget(
+        destination,
+        str(days),
+        str(budget),
+        hotels
+    )
 
-        st.divider()
+      st.success("Travel plan generated successfully.")
 
-        st.subheader("🗺️ Travel Itinerary")
-        st.write(itinerary)
+st.markdown("---")
 
-        st.divider()
+col1, col2, col3 = st.columns(3)
 
-        st.subheader("🏨 Recommended Hotels")
-        st.write(hotels)
+col1.metric("Duration", f"{days} Days")
+col2.metric("Budget", f"₹{budget:,}")
+col3.metric("Destination", destination)
 
-        st.divider()
+st.markdown("---")
 
-        st.subheader("💵 Budget Estimation")
-        st.write(budget_plan)
+tab1, tab2, tab3 = st.tabs(
+    [
+        "Itinerary",
+        "Hotels",
+        "Budget"
+    ]
+)
+
+with tab1:
+    st.subheader("Travel Itinerary")
+    st.markdown(itinerary)
+
+with tab2:
+    st.subheader("Recommended Hotels")
+    st.markdown(hotels)
+
+with tab3:
+    st.subheader("Budget Estimation")
+    st.markdown(budget_plan)
