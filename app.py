@@ -6,7 +6,6 @@ from chains import (
     estimate_budget
 )
 
-<<<<<<< HEAD
 # ----------------------------------------------------------------------------
 # PAGE CONFIG
 # ----------------------------------------------------------------------------
@@ -23,36 +22,33 @@ st.set_page_config(
 # ----------------------------------------------------------------------------
 def inject_css():
     st.markdown("""
- 
-<style>
-
-/* Hide Streamlit header */
-header[data-testid="stHeader"] {
-    display: none;
-}
-
-/* Hide top toolbar */
-div[data-testid="stToolbar"] {
-    display: none;
-}
-
-/* Remove extra top padding */
-.block-container {
-    padding-top: 1rem;
-}
-
-/* Optional: hide hamburger menu */
-#MainMenu {
-    visibility: hidden;
-}
-
-/* Optional: hide footer */
-footer {
-    visibility: hidden;
-}
-
+    <style>
 
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+header[data-testid="stHeader"]{
+    display:none;
+}
+
+div[data-testid="stToolbar"]{
+    display:none;
+}
+
+#MainMenu{
+    visibility:hidden;
+}
+
+footer{
+    visibility:hidden;
+}
+
+.block-container{
+    padding-top:0.5rem;
+    padding-bottom:2rem;
+    max-width:1200px;
+}
+
 
     :root{
         --primary:#4F8CFF;
@@ -512,8 +508,9 @@ def build_downloadable_plan(destination, days, budget, travel_style, itinerary, 
     )
 
 
+# ----------------------------------------------------------------------------
 # APP
-
+# ----------------------------------------------------------------------------
 inject_css()
 
 render_hero(
@@ -522,7 +519,7 @@ render_hero(
     "and a full budget breakdown — tailored to your destination, duration, and style."
 )
 
-
+# -------------------- INPUT CARD --------------------
 st.markdown('<div class="section-block"></div>', unsafe_allow_html=True)
 with st.container(border=True):
     render_section_header("Step 1", "Trip Details")
@@ -545,114 +542,6 @@ with st.container(border=True):
     generate = st.button("Generate Travel Plan", use_container_width=True, type="primary")
 
 # -------------------- RESULTS --------------------
-=======
-st.set_page_config(
-    page_title="AI Travel Planner",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-st.markdown("""
-<style>
-
-
-.block-container{
-    padding-top:2rem;
-    padding-bottom:2rem;
-    max-width:1100px;
-}
-
-
-.stButton>button{
-    width:100%;
-    height:3rem;
-    border-radius:8px;
-    font-weight:600;
-}
-
-
-.stTextInput input,
-.stNumberInput input{
-    border-radius:8px;
-}
-
-
-.stSelectbox{
-    border-radius:8px;
-}
-
-
-button[data-baseweb="tab"]{
-    font-size:16px;
-    font-weight:600;
-}
-
-
-div[data-testid="metric-container"]{
-    border:1px solid #e6e6e6;
-    border-radius:10px;
-    padding:18px;
-    background:white;
-}
-
-</style>
-""", unsafe_allow_html=True)
-st.title("AI Travel Planner")
-
-st.caption(
-    "Generate personalized travel itineraries, hotel recommendations, and budget estimation."
-)
-
-st.markdown("---")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    source = st.text_input(
-        "Source",
-        placeholder="Enter your starting location"
-    )
-
-with col2:
-    destination = st.text_input(
-        "Destination",
-        placeholder="Enter your destination"
-    )
-
-col3, col4 = st.columns(2)
-
-with col3:
-    days = st.number_input(
-        "Duration (Days)",
-        min_value=1,
-        max_value=30,
-        value=3
-    )
-
-with col4:
-    budget = st.number_input(
-        "Budget",
-        min_value=1000,
-        value=20000,
-        step=1000
-    )
-
-travel_style = st.selectbox(
-    "Travel Style",
-    [
-        "Budget",
-        "Standard",
-        "Luxury"
-    ]
-)
-
-st.markdown("---")
-
-generate = st.button(
-    "Generate Travel Plan",
-    use_container_width=True
-)
-
->>>>>>> d64d56f694c47738ef02062d9c0dfccdb9417af7
 if generate:
 
     if destination == "":
@@ -660,13 +549,11 @@ if generate:
     else:
         with st.status("Initializing planner...", expanded=True) as status:
 
-<<<<<<< HEAD
             st.write("Generating itinerary...")
             itinerary = generate_itinerary(
                 source,
                 destination,
                 str(days)
-             
             )
 
             st.write("Searching hotels...")
@@ -726,59 +613,6 @@ if generate:
 # -------------------- FOOTER --------------------
 st.markdown('<div class="section-block"></div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="app-footer">AI Travel Planner </div>',
+    '<div class="app-footer">AI Travel Planner &middot; Built with Streamlit</div>',
     unsafe_allow_html=True
 )
-=======
-    with st.spinner("Generating your travel plan..."):
-
-    itinerary = generate_itinerary(
-        destination,
-        str(days)
-    )
-
-    hotels = recommend_hotels(
-        destination,
-        str(budget),
-        itinerary
-    )
-
-    budget_plan = estimate_budget(
-        destination,
-        str(days),
-        str(budget),
-        hotels
-    )
-
-      st.success("Travel plan generated successfully.")
-
-st.markdown("---")
-
-col1, col2, col3 = st.columns(3)
-
-col1.metric("Duration", f"{days} Days")
-col2.metric("Budget", f"₹{budget:,}")
-col3.metric("Destination", destination)
-
-st.markdown("---")
-
-tab1, tab2, tab3 = st.tabs(
-    [
-        "Itinerary",
-        "Hotels",
-        "Budget"
-    ]
-)
-
-with tab1:
-    st.subheader("Travel Itinerary")
-    st.markdown(itinerary)
-
-with tab2:
-    st.subheader("Recommended Hotels")
-    st.markdown(hotels)
-
-with tab3:
-    st.subheader("Budget Estimation")
-    st.markdown(budget_plan)
->>>>>>> d64d56f694c47738ef02062d9c0dfccdb9417af7
