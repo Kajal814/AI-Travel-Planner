@@ -1,6 +1,7 @@
 from llm import llm
 from prompts import itinerary_prompt, hotel_prompt, budget_prompt
 
+
 # -----------------------------
 # Chain 1: Generate Itinerary
 # -----------------------------
@@ -17,12 +18,13 @@ hotel_chain = hotel_prompt | llm
 budget_chain = budget_prompt | llm
 
 
-# -----------------------------
+
 # Function 1
-# -----------------------------
-def generate_itinerary(destination, days):
+
+def generate_itinerary(source, destination, days):
 
     response = itinerary_chain.invoke({
+        "source": source,       
         "destination": destination,
         "days": days
     })
@@ -43,13 +45,13 @@ def recommend_hotels(destination, budget, itinerary):
 
     return response.content
 
-
 # -----------------------------
 # Function 3
 # -----------------------------
-def estimate_budget(destination, days, budget, hotel):
+def estimate_budget(source, destination, days, budget, hotel):
 
     response = budget_chain.invoke({
+        "source": source,
         "destination": destination,
         "days": days,
         "budget": budget,
@@ -57,3 +59,7 @@ def estimate_budget(destination, days, budget, hotel):
     })
 
     return response.content
+
+print("Loaded chains.py")
+print("recommend_hotels args:", recommend_hotels.__code__.co_argcount)
+print("recommend_hotels arg count:", recommend_hotels.__code__.co_argcount)
