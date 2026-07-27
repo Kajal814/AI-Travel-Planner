@@ -1,5 +1,6 @@
 import streamlit as st
-
+from PIL import Image
+logo = Image.open("assets/travex_logo.png")
 from chains import (
     generate_itinerary,
     recommend_hotels,
@@ -10,7 +11,7 @@ from chains import (
 # PAGE CONFIG
 # ----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="AI Travel Planner",
+    page_title="Travexa",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -453,9 +454,7 @@ footer{
     """, unsafe_allow_html=True)
 
 
-# ----------------------------------------------------------------------------
-# REUSABLE RENDER HELPERS
-# ----------------------------------------------------------------------------
+
 def render_hero(title, subtitle):
     st.markdown(
         f"""
@@ -508,17 +507,42 @@ def build_downloadable_plan(destination, days, budget, travel_style, itinerary, 
     )
 
 
-# ----------------------------------------------------------------------------
-# APP
-# ----------------------------------------------------------------------------
 inject_css()
+
+# ==================== TRAVEXA LOGO ====================
+
+st.markdown(
+    """
+<div style="text-align:center; margin-top:10px; margin-bottom:5px;">
+    <span style="
+        font-size:56px;
+        font-weight:900;
+        letter-spacing:4px;
+        color:#ffffff;
+        font-family:Arial,sans-serif;
+    ">TRAV</span><span style="
+        font-size:56px;
+        font-weight:900;
+        letter-spacing:4px;
+        color:#00c6ff;
+        font-family:Arial,sans-serif;
+    ">EXA</span>
+</div>
+""",
+    unsafe_allow_html=True
+)
+
+# ==================== TAGLINE ====================
+
+st.markdown(
+    '<div style="text-align:center; margin-bottom:30px; font-size:12px; font-weight:600; letter-spacing:4px; color:#9ca3af;">YOUR JOURNEY · YOUR WAY</div>',
+    unsafe_allow_html=True
+)
 
 render_hero(
     "Plan your next trip in seconds",
-    "Generate a complete, personalized travel plan — itinerary, hotel recommendations, "
-    "and a full budget breakdown — tailored to your destination, duration, and style."
+    "Generate a complete, personalized travel plan — itinerary, hotel recommendations, and a full budget breakdown."
 )
-
 # -------------------- INPUT CARD --------------------
 st.markdown('<div class="section-block"></div>', unsafe_allow_html=True)
 with st.container(border=True):
@@ -613,6 +637,6 @@ if generate:
 # -------------------- FOOTER --------------------
 st.markdown('<div class="section-block"></div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="app-footer">AI Travel Planner &middot; Built with Streamlit</div>',
+    '<div class="app-footer">TRAVEXA &middot; Your journey, beautifully planned.</div>',
     unsafe_allow_html=True
 )
